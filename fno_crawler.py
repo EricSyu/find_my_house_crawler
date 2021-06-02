@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from user_agent import generate_user_agent
 import time
+from house import House
 
 class FiveNineOneCrawler:
     SALE_URL = 'https://sale.591.com.tw'
@@ -16,7 +17,7 @@ class FiveNineOneCrawler:
             self.csrf_token = self.__get_csrf_tag()
 
         req_url = search_url
-        houses = []
+        house_list = []
         total = 0
         exists_next = True
         while exists_next == True:
@@ -27,10 +28,10 @@ class FiveNineOneCrawler:
                 "User-Agent": self.user_agent
             })
             resp_json = response.json()
-            houses.extend(resp_json['data']['house_list'])
+            house_list.extend(resp_json['data']['house_list'])
             
             total = resp_json['data']['total']
-            exists_next = len(houses) != total
+            exists_next = len(house_list) != total
 
             if exists_next:
                 page = resp_json['data']['page']
@@ -39,7 +40,7 @@ class FiveNineOneCrawler:
                 data_first = a_tags['data-first']
                 req_url = search_url + f"&firstRow={data_first}&totalRows={total}"
         
-        return houses
+        return self.__to_houses(house_list)
 
     def __get_csrf_tag(self):
         sale_html = self.session.get(FiveNineOneCrawler.SALE_URL, headers={
@@ -48,3 +49,33 @@ class FiveNineOneCrawler:
         soup = BeautifulSoup(sale_html.text, "html.parser")
         csrf_tag = soup.find('meta', { 'name': 'csrf-token' })
         return csrf_tag['content']
+
+    def __to_houses(self, data_list):
+        houses = []
+        type_dict = {
+            "2": "中古屋"
+        }
+        carport_dict = {
+            1: "有",
+            0: "無"
+        }
+        for d in data_list:
+            h = House()
+            h.id = '591_' + str(d['houseid'])
+            h.type = type_dict[d['type']] if d['type'] in type_dict else d['type']
+            h.kind = d['kind_name']
+            h.shape = d['shape_name']
+            h.region = d['region_name']
+            h.section = d['section_name']
+            h.title = d['title']
+            h.carport = carport_dict[d['has_carport']] if d['has_carport'] in carport_dict else d['has_carport']
+            h.room = d['room']
+            h.floor = d['floor']
+            h.area = d['area']
+            h.house_age = d['houseage']
+            h.unit_price = d['unitprice']
+            h.price = d['price']
+            h.link = f"https://sale.591.com.tw/home/house/detail/{d['type']}/{d['houseid']}.html"
+            h.data_from = "591"
+            houses.append(h)
+        return houses
