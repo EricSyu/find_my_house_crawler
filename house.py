@@ -1,5 +1,4 @@
 from datetime import datetime
-from peewee import *
 
 class House:
     def __init__(self):
@@ -24,34 +23,3 @@ class House:
         self.rank = 99
         self.comment = ''
         self.discard = False
-
-
-mysql_db = MySQLDatabase('house', user='root', password='root',
-                        host='127.0.0.1', port=3306)
-
-class HouseDbModel(Model):
-    id = CharField(primary_key = True)
-    type = CharField()
-    kind = CharField()
-    shape = CharField()
-    region = CharField()
-    section = CharField()
-    title = CharField()
-    carport = CharField()
-    room = CharField()
-    floor = CharField()
-    area = FloatField()
-    house_age = IntegerField()
-    unit_price = FloatField()
-    price = IntegerField()
-    link = CharField()
-    other = CharField()
-    data_from = CharField()
-    record_time = DateTimeField(default = datetime.now)
-    rank = IntegerField()
-    comment = CharField()
-    discard = BooleanField()
-
-    class Meta:
-        database = mysql_db
-        table_name = "house_sale_table"

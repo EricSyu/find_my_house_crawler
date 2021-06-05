@@ -30,8 +30,8 @@ class FiveNineOneCrawler:
             resp_json = response.json()
             house_list.extend(resp_json['data']['house_list'])
             
-            total = resp_json['data']['total']
-            exists_next = len(house_list) != total
+            total = int(resp_json['data']['total'])
+            exists_next = (len(house_list) != total)
 
             if exists_next:
                 page = resp_json['data']['page']
