@@ -1,9 +1,12 @@
 from datetime import datetime
 from peewee import *
 from sentry_sdk import capture_exception
+from dotenv import load_dotenv
+import os
 
-mysql_db = MySQLDatabase('house', user='root', password='root',
-                        host='192.168.80.200', port=3306)
+load_dotenv()
+mysql_db = MySQLDatabase(os.getenv('MYSQL_DB_NAME'), user=os.getenv('MYSQL_USER'), password=os.getenv('MYSQL_PWD'),
+                        host=os.getenv('MYSQL_HOST'), port=int(os.getenv('MYSQL_PORT')), autoconnect=False)
 
 class HouseDbModel(Model):
     id = CharField(primary_key = True)
