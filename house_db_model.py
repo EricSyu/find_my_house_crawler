@@ -8,6 +8,8 @@ load_dotenv()
 mysql_db = MySQLDatabase(os.getenv('MYSQL_DB_NAME'), user=os.getenv('MYSQL_USER'), password=os.getenv('MYSQL_PWD'),
                         host=os.getenv('MYSQL_HOST'), port=int(os.getenv('MYSQL_PORT')), autoconnect=False)
 
+house_table_name = os.getenv('HOUSE_TABLE_NAME')
+
 class HouseDbModel(Model):
     id = CharField(primary_key = True)
     type = CharField()
@@ -33,14 +35,14 @@ class HouseDbModel(Model):
 
     class Meta:
         database = mysql_db
-        table_name = "houses_for_sale"
+        table_name = house_table_name
 
 class HouseDbWriter:
 
     @staticmethod
     def insert(houses):
         mysql_db.connect()
-        if not mysql_db.table_exists('houses_for_sale'):
+        if not mysql_db.table_exists(house_table_name):
             mysql_db.create_tables([HouseDbModel])
         
         for h in houses:
