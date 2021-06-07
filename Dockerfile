@@ -26,6 +26,7 @@ ENV MYSQL_PORT=3306
 ENV MYSQL_DB_NAME=house
 ENV MYSQL_USER=root
 ENV MYSQL_PWD=root
+ENV HOUSE_TABLE_NAME=house
 ENV FNO_SEARCH_URL=
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
