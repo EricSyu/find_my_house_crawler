@@ -28,7 +28,9 @@ class FiveNineOneCrawler:
                 "User-Agent": self.user_agent
             })
             resp_json = response.json()
-            house_list.extend(resp_json['data']['house_list'])
+            for h in resp_json['data']['house_list']:
+                if 'is_newhouse' not in h:
+                    house_list.append(h)
             
             total = int(resp_json['data']['total'])
             exists_next = (len(house_list) != total)
