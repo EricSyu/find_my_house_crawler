@@ -20,6 +20,7 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /
 USER appuser
 
 # setup env of app 
+ENV TZ=Asia/Taipei
 ENV MYSQL_HOST=192.168.80.200
 ENV MYSQL_PORT=3306
 ENV MYSQL_DB_NAME=house
