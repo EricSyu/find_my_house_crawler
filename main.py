@@ -1,5 +1,6 @@
 import logging
 import os, sentry_sdk, seqlog
+from time import time, sleep
 from house_db_model import HouseDbWriter
 from fno_crawler import FiveNineOneCrawler
 from dotenv import load_dotenv
@@ -12,9 +13,9 @@ if __name__ == '__main__':
     )
     seqlog.log_to_seq(
         server_url="http://192.168.80.200:5341/", 
-        level=logging.INFO,
-        batch_size=10,
-        auto_flush_timeout=10,  # seconds
+        level=logging.NOTSET,
+        batch_size=1,
+        auto_flush_timeout=1,  # seconds
         override_root_logger=True
     )
 
@@ -23,4 +24,5 @@ if __name__ == '__main__':
     houses = crawler.get_houses(fno_url)
 
     HouseDbWriter.insert(houses)
-    logging.info("house-crawlers run finish.")
+    logging.info("house-crawlers run finish. house_count:{cnt}", cnt=len(houses))
+    sleep(2)
