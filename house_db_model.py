@@ -6,7 +6,7 @@ import os
 
 load_dotenv()
 mysql_db = MySQLDatabase(os.getenv('MYSQL_DB_NAME'), user=os.getenv('MYSQL_USER'), password=os.getenv('MYSQL_PWD'),
-                        host=os.getenv('MYSQL_HOST'), port=int(os.getenv('MYSQL_PORT')), autoconnect=False)
+                        host=os.getenv('MYSQL_HOST'), port=int(os.getenv('MYSQL_PORT')), autoconnect=False, charset='utf8mb4')
 
 house_table_name = os.getenv('HOUSE_TABLE_NAME')
 
