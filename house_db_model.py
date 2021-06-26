@@ -18,6 +18,7 @@ class HouseDbModel(Model):
     region = CharField()
     section = CharField()
     title = CharField()
+    status = CharField()
     carport = CharField()
     room = CharField()
     floor = CharField()
@@ -26,12 +27,10 @@ class HouseDbModel(Model):
     unit_price = FloatField()
     price = IntegerField()
     link = CharField()
-    other = CharField(null=True)
     data_from = CharField()
     record_time = DateTimeField(default = datetime.now)
-    rank = IntegerField()
+    favorite_rank = IntegerField()
     comment = CharField(null=True)
-    discard = BooleanField()
 
     class Meta:
         database = mysql_db
@@ -65,7 +64,6 @@ class HouseDbWriter:
                         unit_price = h.unit_price,
                         price = h.price,
                         link = h.link,
-                        other = h.other,
                         rank = h.rank,
                         data_from = h.data_from,
                         record_time = h.record_time,

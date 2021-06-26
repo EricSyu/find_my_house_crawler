@@ -9,6 +9,7 @@ class House:
         self.region = ''
         self.section = ''
         self.title = ''
+        self.status = 'Active'      # Active / Close / Discard 
         self.carport = ''
         self.room = ''
         self.floor = ''
@@ -17,9 +18,7 @@ class House:
         self.unit_price = 0
         self.price = 0
         self.link = ''
-        self.other = ''
         self.data_from = ''
         self.record_time = datetime.now()
-        self.rank = 99
+        self.rank = 100
         self.comment = ''
-        self.discard = False
