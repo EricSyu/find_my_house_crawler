@@ -1,6 +1,6 @@
 import logging
 import os, sentry_sdk, seqlog
-from time import time, sleep
+from time import sleep
 from house_db_model import HouseDbWriter
 from fno_crawler import FiveNineOneCrawler
 from dotenv import load_dotenv

@@ -29,7 +29,7 @@ class HouseDbModel(Model):
     link = CharField()
     data_from = CharField()
     record_time = DateTimeField(default = datetime.now)
-    favorite_rank = IntegerField()
+    favorite_ranking = IntegerField()
     comment = CharField(null=True)
 
     class Meta:
@@ -56,6 +56,7 @@ class HouseDbWriter:
                         region = h.region,
                         section = h.section,
                         title = h.title,
+                        status = h.status,
                         carport = h.carport,
                         room = h.room,
                         floor = h.floor,
@@ -64,7 +65,7 @@ class HouseDbWriter:
                         unit_price = h.unit_price,
                         price = h.price,
                         link = h.link,
-                        rank = h.rank,
+                        favorite_ranking = h.favorite_ranking,
                         data_from = h.data_from,
                         record_time = h.record_time,
                         comment = h.comment
