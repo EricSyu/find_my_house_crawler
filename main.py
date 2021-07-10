@@ -4,6 +4,7 @@ from time import sleep
 from house_db_model import HouseDbWriter
 from fno_crawler import FiveNineOneCrawler
 from dotenv import load_dotenv
+from sentry_sdk import capture_exception
 
 if __name__ == '__main__':
     load_dotenv()
@@ -19,10 +20,14 @@ if __name__ == '__main__':
         override_root_logger=True
     )
 
-    crawler = FiveNineOneCrawler()
-    fno_url = os.getenv('FNO_SEARCH_URL')
-    houses = crawler.get_houses(fno_url)
+    try:
+        crawler = FiveNineOneCrawler()
+        fno_url = os.getenv('FNO_SEARCH_URL')
+        houses = crawler.get_houses(fno_url)
 
-    HouseDbWriter.insert(houses)
-    logging.info("house-crawlers run finish. house_count:{cnt}", cnt=len(houses))
-    sleep(2)
+        HouseDbWriter.insert(houses)
+        logging.info("house-crawlers run finish. house_count:{cnt}", cnt=len(houses))
+        sleep(2)
+    except Exception as ex:
+        capture_exception(ex)
+    
