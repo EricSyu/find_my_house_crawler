@@ -22,12 +22,23 @@ if __name__ == '__main__':
 
     try:
         crawler = FiveNineOneCrawler()
+        dbhelper = DbHelper()
+
+        # get houses 
         fno_url = os.getenv('FNO_SEARCH_URL')
         houses = crawler.get_houses(fno_url)
 
-        dbhelper = DbHelper()
+        # insert db 
         dbhelper.create_house_table()
         dbhelper.insert(houses)
+
+        # close house if it is sunset 
+        houseLinks = dbhelper.get_active_house_link_pairs()
+        for h in houseLinks:
+            if not crawler.is_active(h['link']):
+                dbhelper.close_house(h['id'])
+                logging.info("close house_id:{id}", id=h['id'])
+
         logging.info("house-crawlers run finish. house_count:{cnt}", cnt=len(houses))
         sleep(2)
     except Exception as ex:

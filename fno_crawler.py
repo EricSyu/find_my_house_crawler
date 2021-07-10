@@ -1,3 +1,4 @@
+from bs4.builder import HTML
 import requests
 from bs4 import BeautifulSoup
 from user_agent import generate_user_agent
@@ -81,3 +82,10 @@ class FiveNineOneCrawler:
             h.data_from = "591"
             houses.append(h)
         return houses
+    
+    def is_active(self, link):
+        response_html = self.session.get(link, headers={
+            "User-Agent": self.user_agent
+        });
+        return "您查詢的物件找不到了" not in response_html.text
+    

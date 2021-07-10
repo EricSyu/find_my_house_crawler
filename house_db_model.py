@@ -1,4 +1,5 @@
 from datetime import datetime
+from house import House
 from peewee import *
 from sentry_sdk import capture_exception
 from dotenv import load_dotenv
@@ -74,6 +75,14 @@ class DbHelper:
             except Exception as ex:
                 capture_exception(ex)
 
+    def get_active_house_link_pairs(self):
+        query = HouseDbModel.select().where(HouseDbModel.status == "Active")
+        houseLinkPairs = [{'id': h.id, 'link': h.link} for h in query]
+        return houseLinkPairs
+
+    def close_house(self, id):
+        query = HouseDbModel.update(status = "Close").where(HouseDbModel.id == id)
+        query.execute()
+
     def __del__(self):
         self.db.close()
-        print('db close')
