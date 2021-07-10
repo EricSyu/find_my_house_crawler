@@ -4,12 +4,6 @@ from sentry_sdk import capture_exception
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
-mysql_db = MySQLDatabase(os.getenv('MYSQL_DB_NAME'), user=os.getenv('MYSQL_USER'), password=os.getenv('MYSQL_PWD'),
-                        host=os.getenv('MYSQL_HOST'), port=int(os.getenv('MYSQL_PORT')), autoconnect=False, charset='utf8mb4')
-
-house_table_name = os.getenv('HOUSE_TABLE_NAME')
-
 class HouseDbModel(Model):
     id = CharField(primary_key = True)
     type = CharField()
@@ -33,17 +27,24 @@ class HouseDbModel(Model):
     comment = CharField(null=True)
 
     class Meta:
-        database = mysql_db
-        table_name = house_table_name
+        database = None
+        table_name = None
 
-class HouseDbWriter:
+class DbHelper:
 
-    @staticmethod
-    def insert(houses):
-        mysql_db.connect()
-        if not mysql_db.table_exists(house_table_name):
-            mysql_db.create_tables([HouseDbModel])
-        
+    def __init__(self):
+        load_dotenv()
+        self.db = MySQLDatabase(os.getenv('MYSQL_DB_NAME'), user=os.getenv('MYSQL_USER'), password=os.getenv('MYSQL_PWD'),
+                                host=os.getenv('MYSQL_HOST'), port=int(os.getenv('MYSQL_PORT')), autoconnect=True, charset='utf8mb4')
+        self.house_table_name = os.getenv('HOUSE_TABLE_NAME')
+        HouseDbModel._meta.database = self.db
+        HouseDbModel._meta.table_name = self.house_table_name
+
+    def create_house_table(self):
+        if not self.db.table_exists(self.house_table_name):
+            self.db.create_tables([HouseDbModel])
+
+    def insert(self, houses):
         for h in houses:
             try:
                 query = HouseDbModel.select().where(HouseDbModel.id == h.id)
@@ -73,4 +74,6 @@ class HouseDbWriter:
             except Exception as ex:
                 capture_exception(ex)
 
-        mysql_db.close()
+    def __del__(self):
+        self.db.close()
+        print('db close')
