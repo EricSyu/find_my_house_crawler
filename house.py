@@ -20,5 +20,5 @@ class House:
         self.link = ''
         self.data_from = ''
         self.record_time = datetime.now()
-        self.favorite_ranking = 100
+        self.favorite_ranking = -1
         self.comment = ''

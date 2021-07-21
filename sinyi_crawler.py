@@ -1,8 +1,5 @@
-from bs4.builder import HTML
 import requests
-from bs4 import BeautifulSoup
 from user_agent import generate_user_agent
-import time
 from house import House
 import json
 
