@@ -3,6 +3,7 @@ import os, sentry_sdk, seqlog
 from time import sleep
 from house_db_model import DbHelper
 from fno_crawler import FiveNineOneCrawler
+from sinyi_crawler import SinYiCrawler
 from dotenv import load_dotenv
 from sentry_sdk import capture_exception
 
@@ -21,7 +22,8 @@ if __name__ == '__main__':
     )
 
     try:
-        crawler = FiveNineOneCrawler()
+        # crawler = FiveNineOneCrawler()
+        crawler = SinYiCrawler()
         dbhelper = DbHelper()
 
         # get houses 
@@ -33,11 +35,11 @@ if __name__ == '__main__':
         dbhelper.insert(houses)
 
         # close house if it is sunset 
-        houseLinks = dbhelper.get_active_house_link_pairs()
-        for h in houseLinks:
-            if not crawler.is_active(h['link']):
-                dbhelper.close_house(h['id'])
-                logging.info("close house_id:{id}", id=h['id'])
+        # houseLinks = dbhelper.get_active_house_link_pairs()
+        # for h in houseLinks:
+        #     if not crawler.is_active(h['link']):
+        #         dbhelper.close_house(h['id'])
+        #         logging.info("close house_id:{id}", id=h['id'])
 
         logging.info("house-crawlers run finish. house_count:{cnt}", cnt=len(houses))
         sleep(2)
