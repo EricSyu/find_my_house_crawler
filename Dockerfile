@@ -27,6 +27,8 @@ ENV MYSQL_DB_NAME=search_house_app
 ENV MYSQL_USER=root
 ENV MYSQL_PWD=root
 ENV HOUSE_TABLE_NAME=house
+ENV SENTRY_URL="https://4834efea1ee74da5ab0602b7454dd30b@o796183.ingest.sentry.io/5802006"
+ENV SEQ_SERVER_URL="http://192.168.80.200:5341/"
 ENV FNO_SEARCH_URL=
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug

@@ -9,14 +9,14 @@ from sentry_sdk import capture_exception
 if __name__ == '__main__':
     load_dotenv()
     sentry_sdk.init(
-        "https://4834efea1ee74da5ab0602b7454dd30b@o796183.ingest.sentry.io/5802006",
+        os.getenv('SENTRY_URL'),
         traces_sample_rate=1.0
     )
     seqlog.log_to_seq(
-        server_url="http://192.168.80.200:5341/", 
+        server_url=os.getenv('SEQ_SERVER_URL'), 
         level=logging.NOTSET,
         batch_size=1,
-        auto_flush_timeout=1,  # seconds
+        auto_flush_timeout=1,
         override_root_logger=True
     )
 
