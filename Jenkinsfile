@@ -1,12 +1,13 @@
 pipeline {
-  agent {
-    dockerfile {
-      filename 'Dockerfile'
+  agent any
+  stages {
+    stage('shell') {
+      steps {
+        sh 'pwd && ls'
+      }
     }
 
-  }
-  stages {
-    stage('tool version') {
+    stage('docker version') {
       steps {
         sh 'docker --version'
       }
