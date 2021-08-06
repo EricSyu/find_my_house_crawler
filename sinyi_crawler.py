@@ -11,10 +11,9 @@ class SinYiCrawler:
         self.session = requests.session()
         self.sid = '20210516215347082'
         self.sat = '730282'
-        self.postData = '{"machineNo":"","ipAddress":"111.246.149.149","osType":4,"model":"web","deviceVersion":"Mac OS X 10.15.7","appVersion":"91.0.4472.114","deviceType":3,"apType":3,"browser":1,"memberId":"","domain":"www.sinyi.com.tw","utmSource":"","utmMedium":"","utmCampaign":"","utmCode":"","requestor":1,"utmContent":"","utmTerm":"","sinyiGroup":1,"filter":{"exludeSameTrade":false,"objectStatus":0,"retType":2,"retRange":["407","428"],"totalPrice":"min-2000","houselandtype":["L"],"parking":["2","9","6"],"year":"min-15","room":{"isRoofPlus":false,"room":"3-3"},"isHasParking":true},"page":1,"pageCnt":20,"sort":"0","isReturnTotal":true}'
 
-    def get_houses(self, search_url):
-        # req_url = search_url
+    def get_houses(self, search_arg):
+        postData = search_arg
         req_url = 'https://sinyiwebapi.sinyi.com.tw/searchObject.php'
         house_list = []
         total = 0
@@ -25,7 +24,7 @@ class SinYiCrawler:
                 "sat": self.sat,
                 "code": "0",
                 "User-Agent": self.user_agent
-            }, data=self.postData)
+            }, data=postData)
             resp_json = response.json()
 
             for h in resp_json['content']['object']:
@@ -36,9 +35,9 @@ class SinYiCrawler:
             if exists_next:
                 current_page = resp_json['content']['page']
                 next_page = current_page + 1
-                postDataObj = json.loads(self.postData)
+                postDataObj = json.loads(postData)
                 postDataObj['page'] = next_page
-                self.postData = json.dumps(postDataObj)
+                postData = json.dumps(postDataObj)
         return self.__to_houses(house_list)
 
     def __to_houses(self, data_list):

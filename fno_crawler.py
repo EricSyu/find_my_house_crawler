@@ -11,12 +11,13 @@ class FiveNineOneCrawler:
     def __init__(self):
         self.user_agent = generate_user_agent()
         self.session = requests.session()
-        self.csrf_token = None;
+        self.csrf_token = None
 
-    def get_houses(self, search_url):
+    def get_houses(self, search_arg):
         if self.csrf_token == None:
             self.csrf_token = self.__get_csrf_tag()
 
+        search_url = 'https://sale.591.com.tw/home/search/list?' + search_arg
         req_url = search_url
         house_list = []
         total = 0
@@ -48,7 +49,7 @@ class FiveNineOneCrawler:
     def __get_csrf_tag(self):
         sale_html = self.session.get(FiveNineOneCrawler.SALE_URL, headers={
             "User-Agent": self.user_agent
-        });
+        })
         soup = BeautifulSoup(sale_html.text, "html.parser")
         csrf_tag = soup.find('meta', { 'name': 'csrf-token' })
         return csrf_tag['content']
@@ -86,6 +87,6 @@ class FiveNineOneCrawler:
     def is_active(self, link):
         response_html = self.session.get(link, headers={
             "User-Agent": self.user_agent
-        });
+        })
         return "您查詢的物件找不到了" not in response_html.text
     
