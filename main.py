@@ -7,7 +7,19 @@ from sinyi_crawler import SinYiCrawler
 from dotenv import load_dotenv
 from sentry_sdk import capture_exception
 
-if __name__ == '__main__':
+def parse(search_str:str):
+    search_composes = search_str.split(';')
+    return [(c.split('|')[0], c.split('|')[1]) for c in search_composes]
+
+def create_crawler(crawler_type:str):
+    if crawler_type == '591':
+        return FiveNineOneCrawler()
+    elif crawler_type == 'sinyi':
+        return SinYiCrawler()
+
+    raise Exception('Could not support type:' + crawler_type)
+
+def main():
     load_dotenv()
     sentry_sdk.init(
         os.getenv('SENTRY_URL'),
@@ -22,15 +34,17 @@ if __name__ == '__main__':
     )
 
     try:
-        # crawler = FiveNineOneCrawler()
-        crawler = SinYiCrawler()
-        dbhelper = DbHelper()
-
         # get houses 
-        fno_url = os.getenv('FNO_SEARCH_URL')
-        houses = crawler.get_houses(fno_url)
+        search_str = os.getenv('SEARCH_HOUSE_STR')
+        search_tuples = parse(search_str)
+        houses = []
+        for s in search_tuples:
+            crawler = create_crawler(s[0])
+            h = crawler.get_houses(s[1])
+            houses.extend(h)
 
         # insert db 
+        dbhelper = DbHelper()
         dbhelper.create_house_table()
         dbhelper.insert(houses)
 
@@ -46,3 +60,6 @@ if __name__ == '__main__':
     except Exception as ex:
         capture_exception(ex)
     
+if __name__ == '__main__':
+    main()
+        

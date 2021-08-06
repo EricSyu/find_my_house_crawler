@@ -11,12 +11,13 @@ class FiveNineOneCrawler:
     def __init__(self):
         self.user_agent = generate_user_agent()
         self.session = requests.session()
-        self.csrf_token = None;
+        self.csrf_token = None
 
-    def get_houses(self, search_url):
+    def get_houses(self, search_arg):
         if self.csrf_token == None:
             self.csrf_token = self.__get_csrf_tag()
 
+        search_url = 'https://sale.591.com.tw/home/search/list?' + search_arg
         req_url = search_url
         house_list = []
         total = 0
