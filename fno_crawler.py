@@ -49,7 +49,7 @@ class FiveNineOneCrawler:
     def __get_csrf_tag(self):
         sale_html = self.session.get(FiveNineOneCrawler.SALE_URL, headers={
             "User-Agent": self.user_agent
-        });
+        })
         soup = BeautifulSoup(sale_html.text, "html.parser")
         csrf_tag = soup.find('meta', { 'name': 'csrf-token' })
         return csrf_tag['content']
@@ -87,6 +87,6 @@ class FiveNineOneCrawler:
     def is_active(self, link):
         response_html = self.session.get(link, headers={
             "User-Agent": self.user_agent
-        });
+        })
         return "您查詢的物件找不到了" not in response_html.text
     
