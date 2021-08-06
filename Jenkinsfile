@@ -15,7 +15,7 @@ pipeline {
 
     stage('save image to tar') {
       steps {
-        sh 'docker save house-crawlers:latest | gzip > /var/jenkins_home/publish/house-crawlers.tar.gz '
+        sh 'docker save house-crawlers:latest | gzip > /var/jenkins_home/publish/house_crawlers_$(date \'+%Y%m%d%H%M\').tar.gz '
       }
     }
 
