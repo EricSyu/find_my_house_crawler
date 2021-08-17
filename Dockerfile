@@ -30,6 +30,7 @@ ENV HOUSE_TABLE_NAME=
 ENV SENTRY_URL=
 ENV SEQ_SERVER_URL=
 ENV SEARCH_HOUSE_STR=
+ENV MODE=
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
 CMD ["python", "main.py"]
