@@ -75,10 +75,12 @@ class DbHelper:
             except Exception as ex:
                 capture_exception(ex)
 
-    def get_active_house_link_pairs(self):
+    def get_active_link_dict(self):
+        link_dict = {}
         query = HouseDbModel.select().where(HouseDbModel.status == "Active")
-        houseLinkPairs = [{'id': h.id, 'link': h.link} for h in query]
-        return houseLinkPairs
+        for h in query:
+            link_dict[h.id] = h.link
+        return link_dict
 
     def close_house(self, id):
         query = HouseDbModel.update(status = "Close").where(HouseDbModel.id == id)

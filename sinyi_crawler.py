@@ -65,4 +65,10 @@ class SinYiCrawler:
             h.data_from = "信義房屋"
             houses.append(h)
         return houses
+
+    def is_active(self, link):
+        response_html = self.session.get(link, headers={
+            "User-Agent": self.user_agent
+        })
+        return "抱歉！找不到這一頁" not in response_html.text
     
